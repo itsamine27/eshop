@@ -110,7 +110,7 @@ class Log_Out_User(SuccessUrlRedirectMixin, View):
         logout(request)
         url = self.get_success_url()
         if url:
-            return redirect(f'http://{url}.{settings.BASE_DOMAIN}:8000')
+            return redirect(f'https://{url}.{settings.BASE_DOMAIN}:8000')
         else:
             return redirect('/')
 
@@ -128,7 +128,7 @@ class NewProfile(LoginRequiredMixin, FormView):
             company.save()
             # Build tenant URL using the username (assumes each tenant's domain is formed with username)
             username = self.request.user.username.lower()
-            tenant_domain = f"http://{username}.{settings.BASE_DOMAIN}:8000"
+            tenant_domain = f"https://{username}.{settings.BASE_DOMAIN}:8000"
             return redirect(tenant_domain)
         except:
             return redirect('/')
@@ -138,6 +138,6 @@ class HomeView(FormView):
     template_name="base/home.html"
     def form_valid(self, form):
         company=form.cleaned_data['name']
-        return redirect("http://"+company+"."+settings.BASE_DOMAIN+":8000")
+        return redirect("https://"+company+"."+settings.BASE_DOMAIN+":8000")
 
 

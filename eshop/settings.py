@@ -61,8 +61,8 @@ TENANT_MODEL = 'base.Client'
 
 
 TENANT_DOMAIN_MODEL = "base.Domain"
-BASE_DOMAIN = "lvh.me"
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='.lvh.me,localhost', cast=lambda v: v.split(','))
+BASE_DOMAIN = "eshop-production-dcd1.up.railway.app"
+ALLOWED_HOSTS = ['.eshop-production-dcd1.up.railway.app', 'eshop-production-dcd1.up.railway.app']
 
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
