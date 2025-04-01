@@ -1,0 +1,25 @@
+{% extends 'navbar.html' %}
+{% block main_content %}
+
+{% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% load socialaccount %}
+
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+
+{% block blog_content %}
+    
+{% endblock blog_content %}
+{% endblock main_content %}
+
+
+

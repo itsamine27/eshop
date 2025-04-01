@@ -1,0 +1,19 @@
+{% extends 'products/navbar.html' %}
+{%block blog_content%}
+    <h1>{{product.product_name}}</h1>
+    {% if product.product_images.all %}
+        <div class="product-images">
+          {% for image in product.product_images.all %}
+            <img src="{{ image.product_image.url }}" alt="{{ product.product_name }}" style="max-width:200px; margin:5px;"/>
+          {% endfor %}
+        </div>
+    {% endif %}
+      
+    
+    <form method="post">
+        
+        {%csrf_token%}
+        {{form.as_p}}
+        <input type="submit" value="submit rating">
+    </form>
+{%endblock blog_content%}

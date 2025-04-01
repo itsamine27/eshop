@@ -1,0 +1,10 @@
+<h1>Delete {{ object.product_name }}</h1>
+<p>Description: {{ object.product_description }}</p>
+<p>Price: {{ object.product_price }}</p>
+<p>Discount: {{ object.product_discount }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'product:allproducts' %}">Cancel</a>
+</form>

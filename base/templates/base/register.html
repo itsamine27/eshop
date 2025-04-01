@@ -1,0 +1,14 @@
+{% extends 'base/messages.html' %}
+
+
+{% block blog_content %}
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+        <input type="submit" value="submit" />
+    </form>
+    <h3>already have an account</h3>
+    <a href="{% url 'login' %}">login</a>
+    {% load socialaccount %}
+    <a href="{% provider_login_url 'google' %}">Login with Google</a>
+{% endblock blog_content %}

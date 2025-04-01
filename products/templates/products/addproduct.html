@@ -1,0 +1,18 @@
+{% extends 'products/navbar.html' %}
+
+{% block blog_content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+    
+        <h3>Upload Images</h3>
+        {{ formset.management_form }}
+        {% for inline_form in formset %}
+        <div class="inline-form">
+            {{ inline_form.as_p }}
+        </div>
+        {% endfor %}
+    
+        <button type="submit">Add Product</button>
+  </form>
+{% endblock blog_content %}

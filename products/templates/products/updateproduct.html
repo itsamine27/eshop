@@ -1,0 +1,12 @@
+{% extends 'products/navbar.html' %}
+{% block blog_content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ image_formset.management_form }}
+        {% for form in image_formset %}
+            {{ form.as_p }}
+        {% endfor %}
+        <button type="submit">Update</button>
+    </form>
+{% endblock blog_content %}

@@ -1,0 +1,103 @@
+{% extends 'products/navbar.html' %}
+
+{% block blog_content %}
+<div style="max-width: 1200px; margin: 20px auto; font-family: Arial, sans-serif;">
+  <h1 style="text-align: center; color: #333;">All Products</h1>
+
+  <!-- Search Form -->
+  <form method="GET" action="{% url 'search:search' %}" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+    <input 
+      type="text" 
+      name="q" 
+      placeholder="Search products" 
+      value="{{ request.GET.q }}"
+      style="padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 4px;"
+    >
+    <div>
+      <label for="sort" style="margin-right: 5px;">Sort by:</label>
+      <select 
+        name="sort" 
+        id="sort" 
+        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;"
+      >
+        <option value="name_asc" {% if request.GET.sort == "name_asc" %}selected{% endif %}>Name (A-Z)</option>
+        <option value="name_desc" {% if request.GET.sort == "name_desc" %}selected{% endif %}>Name (Z-A)</option>
+        <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Price (Low to High)</option>
+        <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Price (High to Low)</option>
+        <option value="rating" {% if request.GET.sort == "rating" %}selected{% endif %}>Rating</option>
+      </select>
+    </div>
+    <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+  </form>
+
+  <!-- Product List -->
+  {% for product in products %}
+  <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #f9f9f9;">
+    <h2 style="color: #333;">{{ product.product_name }}</h2>
+    <p><strong>Description:</strong> {{ product.product_description }}</p>
+    <p><strong>Quantity:</strong> {{ product.product_quantity }}</p>
+    <p><strong>Price:</strong> ${{ product.product_price }}</p>
+    {% if product.product_discount > 0 %}
+      <p><strong>Discount:</strong> {{ product.product_discount }}%</p>
+    {% endif %}
+    <p><strong>Discounted Price:</strong> {{ product.CountDiscount }}</p>
+    {% if product.Avrage_Rating == 0 %}
+      <p><strong>No Rating Available</strong></p>
+    {% else %}
+      <p><strong>Average Rating:</strong> {{ product.Avrage_Rating }}</p>
+    {% endif %}
+
+    <!-- Product Images -->
+    {% if product.product_images.all %}
+    <div style="margin: 10px 0;">
+      {% for image in product.product_images.all %}
+        <img 
+          src="{{ image.product_image.url }}" 
+          alt="{{ product.product_name }}" 
+          style="max-width: 150px; margin-right: 10px; border-radius: 4px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);"
+        />
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Product Ratings -->
+    {% if product.product_rating.all %}
+    <div>
+      <p><strong>Individual Ratings:</strong></p>
+      <ul style="list-style-type: none; padding: 0; margin: 0;">
+        {% for rating in product.product_rating.all %}
+        <li style="margin: 5px 0;">⭐ {{ rating.product_rating }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- Authenticated User Actions -->
+    {% if request.user.is_authenticated %}
+      {% if request.user.username == request.tenant.name %}
+      <a href="{%url 'product:update_product' product.pk %}">update Product</a>
+      <a href="{% url 'product:delete_product' product.pk %}">delete Product</a>
+      {%else%}
+        <a href="{% url 'cart:addtocart' product.pk %}" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">Add To Cart</a>
+        <a href="{% url 'search:rating' product.pk %}" style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">Rate the Product</a>
+      {% endif %}
+    {% endif %}
+  </div>
+  {% empty %}
+  <p>No products found.</p>
+  {% endfor %}
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div style="text-align: center; margin-top: 20px;">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" style="margin-right: 10px; color: #333; text-decoration: none;">&laquo; Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" style="margin-left: 10px; color: #333; text-decoration: none;">Next &raquo;</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock blog_content %}
