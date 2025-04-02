@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
 
 
 PUBLIC_SCHEMA_NAME = 'public'
@@ -66,7 +66,7 @@ ALLOWED_HOSTS = ['.eshop-production-dcd1.up.railway.app', 'eshop-production-dcd1
 
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
-
+DEBUG = False
 
 
 LOGIN_URL = '/accounts/login/'
