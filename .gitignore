@@ -1,0 +1,22 @@
+# Byte-compiled / cached files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Environment variables (DO NOT COMMIT THIS!)
+.env
+
+# Django migrations
+*/migrations/*.py
+*/migrations/*.pyc
+
+# Logs
+logs/
+*.log
+
+# Static and media files (if generated dynamically)
+staticfiles/
+media/
