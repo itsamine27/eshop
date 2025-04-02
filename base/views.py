@@ -96,7 +96,7 @@ class Log_In_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
                 if host == central_host:
                     return redirect(build_tenant_url(username))
                 else:
-                    return redirect(f"http://{host}/")
+                    return redirect(f"http:s//{host}/")
         else:
             messages.error(self.request, "User not found")
             return self.form_invalid(form)

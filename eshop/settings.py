@@ -62,7 +62,10 @@ TENANT_MODEL = 'base.Client'
 
 TENANT_DOMAIN_MODEL = "base.Domain"
 BASE_DOMAIN = "eshop-production-dcd1.up.railway.app"
-ALLOWED_HOSTS = ['.eshop-production-dcd1.up.railway.app', 'eshop-production-dcd1.up.railway.app']
+from decouple import config
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=lambda v: [host.strip() for host in v.split(',')])
+
 
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
