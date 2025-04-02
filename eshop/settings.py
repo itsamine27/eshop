@@ -64,13 +64,10 @@ TENANT_DOMAIN_MODEL = "base.Domain"
 BASE_DOMAIN = "eshop-production-dcd1.up.railway.app"
 from decouple import config
 
-ALLOWED_HOSTS = ["*"]
-print(f"🚀 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
-
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
 DEBUG = False
-
+ALLOWED_HOSTS = ["*"]
 
 LOGIN_URL = '/accounts/login/'
 MIDDLEWARE = [
