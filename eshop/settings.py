@@ -65,7 +65,7 @@ BASE_DOMAIN = "eshop-production-dcd1.up.railway.app"
 from decouple import config
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=lambda v: [host.strip() for host in v.split(',')])
-
+print(f"🚀 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
