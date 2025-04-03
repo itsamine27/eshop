@@ -1,1 +1,1 @@
-web: python manage.py runserver 0.0.0.0:$PORT --noreload
+web: python manage.py makemigrations && python manage.py migrate && python manage.py create_public_tenant && python manage.py migrate_schemas && python manage.py collectstatic --noinput && gunicorn eshop.wsgi:application --bind 0.0.0.0:$PORT
