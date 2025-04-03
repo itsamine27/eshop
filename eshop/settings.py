@@ -4,7 +4,7 @@ from pathlib import Path
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-from decouple import config
+from decouple import config,Csv
 import os
 from dotenv import load_dotenv
 
@@ -67,7 +67,7 @@ from decouple import config
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
 DEBUG = False
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 LOGIN_URL = '/accounts/login/'
 MIDDLEWARE = [
