@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
         if not Client.objects.filter(schema_name='public').exists():
             self.stdout.write("Creating public tenant...")
-            tenant = Client(schema_name='public', name='Public Tenant')
+            tenant = Client(schema_name='public', name='public')
             tenant.save()
 
             domain_obj = Domain(domain=domain, tenant=tenant, is_primary=True)

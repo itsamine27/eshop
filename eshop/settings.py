@@ -118,6 +118,9 @@ DATABASES = {
     'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
 
+# Override the engine for django-tenants:
+DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
+
 DATABASE_ROUTERS = ['django_tenants.routers.TenantSyncRouter']
 default_app_config = 'base.apps.BaseConfig'
 
