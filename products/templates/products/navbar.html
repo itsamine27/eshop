@@ -20,15 +20,15 @@
     <div style="display: flex; align-items: center; gap: 15px;">
         {% if request.user.is_authenticated %}
             <h1 style="font-size: 1.2em; margin: 0; color: #333;">Hello {{request.user.username}}</h1>
-            <a href="http://lvh.me:8000/accounts/logout/?next={{ request.tenant.schema_name|urlencode }}" style="text-decoration: none; color: #007BFF;">Logout</a>
+            <a href="https://eshop-m942.onrender.com/accounts/logout/?next={{ request.tenant.schema_name|urlencode }}" style="text-decoration: none; color: #007BFF;">Logout</a>
             {% if request.user.username == request.tenant.name %}
                 <a href="{% url 'product:product_creation' %}" style="text-decoration: none; color: #28A745;">Add New Product</a>
             {% else %}
                 <a href="{% url 'cart:allprocart' %}" style="text-decoration: none; color: #17A2B8;">My cart</a>
             {% endif %}
         {% else %}
-            <a href="http://lvh.me:8000/accounts/login/?next={{ request.tenant.schema_name|urlencode }}" style="text-decoration: none; color: #007BFF;">Login</a>
-            <a href="http://lvh.me:8000/accounts/signup/?next={{ request.tenant.schema_name|urlencode }}" style="text-decoration: none; color: #28A745;">Signup</a>
+            <a href="https://eshop-m942.onrender.com/accounts/login/?next={{ request.tenant.schema_name|urlencode }}" style="text-decoration: none; color: #007BFF;">Login</a>
+            <a href="https://eshop-m942.onrender.com/signup/?next={{ request.tenant.schema_name|urlencode }}" style="text-decoration: none; color: #28A745;">Signup</a>
         {% endif %}
         <a href="/" style="text-decoration: none; color: #333;">Home</a>
     </div>

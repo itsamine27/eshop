@@ -61,7 +61,7 @@ TENANT_MODEL = 'base.Client'
 
 
 TENANT_DOMAIN_MODEL = "base.Domain"
-BASE_DOMAIN = "eshop-production-dcd1.up.railway.app"
+BASE_DOMAIN = "eshop-m942.onrender.com"
 from decouple import config
 
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
