@@ -79,7 +79,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'middleware.current_request.ThreadLocalMiddleware',
     # Add the required middleware here
     'allauth.account.middleware.AccountMiddleware',  # Required by django-allauth
 ]
@@ -193,12 +193,31 @@ AUTHENTICATION_BACKENDS = [
 # Mandatory Allauth settings
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/profile_creation/'  # Redirect users after successful login
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+from django_tenants.utils import get_current_tenant
+
+def is_public_request():
+    try:
+        from django.core.handlers.wsgi import WSGIRequest
+        from threading import local
+        _thread_locals = local()
+        request = getattr(_thread_locals, 'request', None)
+        if request and hasattr(request, 'tenant'):
+            return request.tenant.schema_name == 'public'
+    except:
+        return False
+    return False
+
+if is_public_request():
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+else:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 LOGGING = {
     'version': 1,
