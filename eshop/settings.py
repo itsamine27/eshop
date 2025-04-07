@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'tenant_schemas.middleware.TenantPrefixMiddleware',  # Changed here!
+    'middleware.current_request.TenantPrefixMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
