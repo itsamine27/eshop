@@ -1,17 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
-from django_tenants.models import TenantMixin, DomainMixin
+from tenant_schemas.models import TenantMixin
+from django.db import models
 
 class Client(TenantMixin):
     name = models.CharField(max_length=100)
     created_on = models.DateField(auto_now_add=True)
-    # You can add more fields as needed
+    # additional fields
 
-    # Optional: Override any TenantMixin behavior if needed
-
-class Domain(DomainMixin):
-    pass
 class CompanyOwner(models.Manager):
     def CompanyUser(self,name):
         comapany=User.objects.get(username=name)

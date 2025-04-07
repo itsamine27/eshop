@@ -8,11 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # This loads your .env file if it exists.
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 SECRET_KEY = config('SECRET_KEY')
 
@@ -23,7 +19,7 @@ ROOT_URLCONF = "eshop.urls"
 
 # Application definition
 SHARED_APPS = (
-    'django_tenants',
+    'tenant_schemas', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,10 +43,10 @@ TENANT_APPS = (
 INSTALLED_APPS = SHARED_APPS + TENANT_APPS
 SOCIALACCOUNT_ADAPTER = 'base.adapters.TenantSocialAccountAdapter'
 
-TENANT_MODEL = 'base.Client'
-TENANT_DOMAIN_MODEL = "base.Domain"
+TENANT_RESOLVER_CLASS = "tenant_schemas.middleware.TenantPrefixMiddleware"
+PUBLIC_SCHEMA_URLCONF = 'eshop.public_urls'
 BASE_DOMAIN = "eshop-m942.onrender.com"
-
+TENANT_MODEL="base.Client"
 SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
 DEBUG = False
@@ -58,26 +54,24 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 LOGIN_URL = '/accounts/login/'
 
-# Global SSL settings – disable global HTTPS enforcement
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_HSTS_PRELOAD = False
+# Global SSL settings
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
-# Middleware
+# Middleware - Note the change below for path-based tenancy:
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django_tenants.middleware.TenantMiddleware',
+    'tenant_schemas.middleware.TenantPrefixMiddleware',  # Changed here!
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Custom middleware to conditionally redirect public tenant to HTTPS
-    'middleware.current_request.ConditionalSSLRedirectMiddleware',
     'allauth.account.middleware.AccountMiddleware',  # Allauth middleware
 ]
 
@@ -107,8 +101,10 @@ import dj_database_url
 DATABASES = {
     'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
-DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
-DATABASE_ROUTERS = ['django_tenants.routers.TenantSyncRouter']
+DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
 default_app_config = 'base.apps.BaseConfig'
 
 # Password validation
@@ -154,7 +150,6 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/accounts/profile_creation/'
 
-# Logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

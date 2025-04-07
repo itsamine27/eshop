@@ -96,7 +96,7 @@ class Log_In_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
                 if host == central_host:
                     return redirect(build_tenant_url(username))
                 else:
-                    return redirect(f"http://{host}/")
+                    return redirect(f"https://{host}/")
         else:
             messages.error(self.request, "User not found")
             return self.form_invalid(form)
@@ -110,7 +110,7 @@ class Log_Out_User(SuccessUrlRedirectMixin, View):
         logout(request)
         url = self.get_success_url()
         if url:
-            return redirect(f'http://{url}.{settings.BASE_DOMAIN}')
+            return redirect(f'https://{settings.BASE_DOMAIN}/{url}')
         else:
             return redirect('/')
 
@@ -128,7 +128,7 @@ class NewProfile(LoginRequiredMixin, FormView):
             company.save()
             # Build tenant URL using the username (assumes each tenant's domain is formed with username)
             username = self.request.user.username.lower()
-            tenant_domain = f"http://{username}.{settings.BASE_DOMAIN}"
+            tenant_domain = f"https://{settings.BASE_DOMAIN}/{username}"
             return redirect(tenant_domain)
         except:
             return redirect('/')
@@ -138,6 +138,6 @@ class HomeView(FormView):
     template_name="base/home.html"
     def form_valid(self, form):
         company=form.cleaned_data['name']
-        return redirect("http://"+company+"."+settings.BASE_DOMAIN)
+        return redirect("https://"+settings.BASE_DOMAIN+"/"+company)
 
 
