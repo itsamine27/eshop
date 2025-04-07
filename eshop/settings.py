@@ -15,7 +15,7 @@ SECRET_KEY = config('SECRET_KEY')
 # Multi-tenancy settings
 PUBLIC_SCHEMA_NAME = 'public'
 PUBLIC_SCHEMA_URLCONF = "eshop.public_urls"
-ROOT_URLCONF = "eshop.urls"
+ROOT_URLCONF = "eshop.public_urls"
 
 # Application definition
 SHARED_APPS = (
@@ -67,15 +67,13 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'middleware.current_request.TenantPrefixMiddleware',
+    'middleware.current_request.PathBasedTenantMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',  # Allauth middleware
 ]
-
-ROOT_URLCONF = 'eshop.urls'
 
 TEMPLATES = [
     {
@@ -106,7 +104,6 @@ DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
 )
 default_app_config = 'base.apps.BaseConfig'
-DEFAULT_FILE_STORAGE = 'tenant_schemas.storage.TenantFileSystemStorage'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
