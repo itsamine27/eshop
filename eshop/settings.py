@@ -193,7 +193,6 @@ AUTHENTICATION_BACKENDS = [
 # Mandatory Allauth settings
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/profile_creation/'  # Redirect users after successful login
-from django_tenants.utils import get_current_tenant
 
 def is_public_request():
     try:
