@@ -51,6 +51,9 @@ SESSION_COOKIE_DOMAIN = "." + BASE_DOMAIN
 CSRF_COOKIE_DOMAIN = "." + BASE_DOMAIN
 DEBUG = False
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ROOT_URLCONF = 'eshop.public_urls'
+
+TENANT_RESOLVER_CLASS = "tenant_schemas.middleware.TenantPrefixMiddleware"
 
 LOGIN_URL = '/accounts/login/'
 
