@@ -13,4 +13,5 @@ urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path("accounts/", include("base.urls")),
     path('auth/', include('allauth.urls')),
+    path('<tenant>/', include('eshop.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
