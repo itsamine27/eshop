@@ -106,6 +106,7 @@ DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
 )
 default_app_config = 'base.apps.BaseConfig'
+DEFAULT_FILE_STORAGE = 'tenant_schemas.storage.TenantFileSystemStorage'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
