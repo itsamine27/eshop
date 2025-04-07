@@ -193,9 +193,6 @@ AUTHENTICATION_BACKENDS = [
 # Mandatory Allauth settings
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/profile_creation/'  # Redirect users after successful login
-
-SOCIALACCOUNT_LOGIN_ON_GET = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

@@ -50,7 +50,7 @@ class SuccessUrlRedirectMixin:
 
 
 # ... (Mixin definitions remain the same)
-
+@method_decorator(ratelimit(key='ip', rate='7/m', block=True, method="POST"), name='dispatch')
 class Sign_Up_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
     template_name = "base/register.html"
     form_class = SignupUserForm
