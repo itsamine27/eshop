@@ -1,5 +1,6 @@
 from django.db import connection
 from django.utils.deprecation import MiddlewareMixin
+from tenant_schemas.utils import get_tenant_model
 class PathBasedTenantMiddleware(MiddlewareMixin):
     def process_request(self, request):
         path_parts = request.path_info.strip('/').split('/')
