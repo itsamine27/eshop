@@ -1,25 +1,18 @@
-from django.utils.deprecation import MiddlewareMixin
-from django.http import Http404
+from django.db import connection
 from base.models import Client  # Your tenant model
 
-class TenantPrefixMiddleware(MiddlewareMixin):
-    """
-    A simple middleware that extracts the tenant prefix from the URL path.
-    For example, a request to /tenant1/dashboard/ will set tenant 'tenant1'.
-    """
+class TenantPrefixMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-    def process_request(self, request):
-        path_parts = request.path_info.split('/')
-        # Expecting URL in the format: /<tenant>/...
-        if len(path_parts) > 1 and path_parts[1]:
-            tenant_prefix = path_parts[1]
-            try:
-                tenant = Client.objects.get(schema_name=tenant_prefix)
-                request.tenant = tenant
-                # Optionally, strip the tenant prefix from the path so your URLconf works normally.
-                request.path_info = '/' + '/'.join(path_parts[2:])
-            except Client.DoesNotExist:
-                raise Http404("Tenant does not exist")
+    def __call__(self, request):
+        path = request.path_info.strip("/").split("/")
+        prefix = path[0] if path and path[0] else ""
+
+        if prefix and Client.objects.filter(schema_name=prefix).exists():
+            tenant = Client.objects.get(schema_name=prefix)
         else:
-            # No tenant specified; you could assign the public tenant or raise 404.
-            raise Http404("Tenant prefix missing from URL")
+            tenant = Client.objects.get(schema_name="public")
+
+        connection.set_schema(tenant.schema_name)
+        return self.get_response(request)
