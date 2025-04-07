@@ -50,7 +50,7 @@ class SuccessUrlRedirectMixin:
 
 
 # ... (Mixin definitions remain the same)
-@method_decorator(ratelimit(key='ip', rate='7/m', block=True, method="POST"), name='dispatch')
+
 class Sign_Up_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
     template_name = "base/register.html"
     form_class = SignupUserForm
@@ -64,7 +64,7 @@ class Sign_Up_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
         messages.success(self.request, "You have successfully signed up!")
         
         
-        central_host = f".{settings.BASE_DOMAIN}:8000"
+        central_host = f".{settings.BASE_DOMAIN}"
         
         
         next_url = self.get_success_url()
@@ -92,7 +92,7 @@ class Log_In_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
                 return redirect(next_url)
             else:
                 host = self.request.get_host()
-                central_host = f"{settings.BASE_DOMAIN}:8000"
+                central_host = f"{settings.BASE_DOMAIN}"
                 if host == central_host:
                     return redirect(build_tenant_url(username))
                 else:
@@ -110,7 +110,7 @@ class Log_Out_User(SuccessUrlRedirectMixin, View):
         logout(request)
         url = self.get_success_url()
         if url:
-            return redirect(f'https://{url}.{settings.BASE_DOMAIN}:8000')
+            return redirect(f'https://{url}.{settings.BASE_DOMAIN}')
         else:
             return redirect('/')
 
@@ -128,7 +128,7 @@ class NewProfile(LoginRequiredMixin, FormView):
             company.save()
             # Build tenant URL using the username (assumes each tenant's domain is formed with username)
             username = self.request.user.username.lower()
-            tenant_domain = f"https://{username}.{settings.BASE_DOMAIN}:8000"
+            tenant_domain = f"https://{username}.{settings.BASE_DOMAIN}"
             return redirect(tenant_domain)
         except:
             return redirect('/')
@@ -138,6 +138,6 @@ class HomeView(FormView):
     template_name="base/home.html"
     def form_valid(self, form):
         company=form.cleaned_data['name']
-        return redirect("https://"+company+"."+settings.BASE_DOMAIN+":8000")
+        return redirect("https://"+company+"."+settings.BASE_DOMAIN)
 
 
