@@ -13,5 +13,5 @@ def create_tenant_for_user(sender, instance, created, **kwargs):
 
         
         # Create the tenant. You can add more fields as necessary.
-        tenant = Client(schema_name=schema_name, name=instance.company)
+        tenant = Client(schema_name=schema_name, name=instance.company, domain_url="eshop-m942.onrender.com/"+schema_name)
         tenant.save()  # This call will trigger the creation of a new schema
