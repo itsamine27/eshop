@@ -74,7 +74,7 @@
 
     <!-- Authenticated User Actions -->
     {% if request.user.is_authenticated %}
-      {% if request.user.username == request.tenant.name %}
+      {% if request.user.username == tenant_name %}
       <a href="{%url 'product:update_product' product.pk %}">update Product</a>
       <a href="{% url 'product:delete_product' product.pk %}">delete Product</a>
       {%else%}

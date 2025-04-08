@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse
 # Create your views here.
 from django.contrib import messages
 from products.models import CompanyProducts, ProductRating
@@ -46,7 +46,9 @@ class SearchListView(ListView):
             products=sorted(products, key=lambda product: product.CountDiscount, reverse=True)
         elif sort_input == "rating":
             products=sorted(products, key=lambda product: product.Avrage_Rating, reverse=True)
-        return products
+        if products:
+            return products
+        return HttpResponse('no products available')
     
 class RatingView(LoginRequiredMixin,OnlyCustomer,View):
     def get(self, request, **kwargs):
