@@ -10,14 +10,16 @@ class PathBasedTenantMiddleware(MiddlewareMixin):
             TenantModel = get_tenant_model()
             try:
                 tenant = TenantModel.objects.get(schema_name=tenant_slug)
-                connection.set_tenant(tenant)
+                connection.set_tenant(tenant)  # Set the database connection's tenant
                 request.urlconf = 'eshop.urls'
                 request.path_info = '/' + '/'.join(path_parts[1:])
+                request.tenant = tenant  # Add this line to set the tenant on the request object
                 request.tenant_path_prefix = '/' + tenant_slug
             except TenantModel.DoesNotExist:
-                return  # fallback to 404 or something else
+                return  # Handle tenant not found (e.g., return a 404 response)
         else:
-            # This is the public tenant
+            # Public tenant
             tenant = get_tenant_model().objects.get(schema_name=get_public_schema_name())
-            connection.set_tenant(tenant)
+            connection.set_tenant(tenant)  # Set the public schema
             request.urlconf = 'eshop.public_urls'
+            request.tenant = tenant  # Add this line for public tenant
