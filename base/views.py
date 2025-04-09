@@ -64,14 +64,14 @@ class Sign_Up_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
         messages.success(self.request, "You have successfully signed up!")
         
         
-        central_host = f".{settings.BASE_DOMAIN}"
+        central_host = f"{settings.BASE_DOMAIN}/"
         
         
         next_url = self.get_success_url()
         if next_url:
             if not (next_url.startswith("http://") or next_url.startswith("https://")):
                 return redirect(build_tenant_url(next_url))
-            return redirect(next_url+central_host)
+            return redirect(central_host+next_url)
         else:
             return redirect(reverse_lazy('create_company_profile'))
 @method_decorator(ratelimit(key='ip', rate='7/m', block=True, method="POST"), name='dispatch')
@@ -92,11 +92,11 @@ class Log_In_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
                 return redirect(next_url)
             else:
                 host = self.request.get_host()
-                central_host = f"{settings.BASE_DOMAIN}"
+                central_host = settings.BASE_DOMAIN
                 if host == central_host:
                     return redirect(build_tenant_url(username))
                 else:
-                    return redirect(f"https://{host}/")
+                    return redirect(f"https://{central_host}/{host}/")
         else:
             messages.error(self.request, "User not found")
             return self.form_invalid(form)
