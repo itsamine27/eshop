@@ -7,13 +7,15 @@ from django.views.generic.base import TemplateView
 from products.models import CompanyProducts
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-# Create your views here.
+
+
 class OnlyCustomer(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
-        host=request.get_host()
-        if request.user.username.lower() in host:
-            return redirect('/')
+        tenant_name = kwargs.get('tenant_name') or request.path.strip('/').split('/')[0]
+        if request.user.is_authenticated and request.user.username.lower() == tenant_name.lower():
+            return redirect(f'/{tenant_name}/')
         return super().dispatch(request, *args, **kwargs)
+
     
 
 class AddCart(LoginRequiredMixin,OnlyCustomer,View):
