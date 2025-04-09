@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.urls import path, include
 
-
+app_name = 'eshop'
 urlpatterns = [
     
     path('', include(('products.urls', 'product'), namespace="product")),
