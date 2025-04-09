@@ -10,12 +10,21 @@ from django_ratelimit.decorators import ratelimit
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class OnlyOwner(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
-        tenant_name = kwargs.get('tenant_name') or request.path.strip('/').split('/')[0]
-        if not request.user.is_authenticated or request.user.username.lower() != tenant_name.lower():
-            return HttpResponse("Forbidden", status=403)
+        host = request.get_host()
+        tenant_name = kwargs.get('tenant_name') or request.path.split('/')[1]
+
+        logger.debug(f"Request user: {request.user.username}, Tenant name: {tenant_name}, Host: {host}")
+
+        if not request.user.is_authenticated or tenant_name.lower() != request.user.username.lower():
+            logger.debug("Redirecting to home due to tenant mismatch.")
+            return redirect('/')  # Redirect to home if the tenant doesn't match the username
+
         return super().dispatch(request, *args, **kwargs)
 
 

@@ -35,7 +35,7 @@ class AddCart(LoginRequiredMixin, OnlyCustomer, View):
         return response
 
 
-class AllProductCart(OnlyCustomer, TemplateView):
+class AllProductCart( TemplateView):
     template_name = "cart/allcart.html"
 
     def get_context_data(self, **kwargs):
