@@ -92,7 +92,7 @@ class DeleteProduct(LoginRequiredMixin, OnlyOwner, DeleteView):
         return reverse_lazy('product:allproducts', kwargs={'tenant_name': self.request.user.username})
 
 
-class AllProducts(LoginRequiredMixin, OnlyOwner, ListView):
+class AllProducts(ListView):
     template_name = "products/products.html"
     model = CompanyProducts
     context_object_name = 'products'
