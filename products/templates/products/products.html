@@ -73,21 +73,22 @@
     {% endif %}
 
     <!-- Authenticated User Actions -->
-  {% if request.user.is_authenticated %}
-    {% if request.user.username == tenant_name %}
-      <a href="{% url 'eshop_ns:product:update_product' tenant_name=tenant_name pk=product.pk %}">Update Product</a>
-      <a href="{% url 'eshop_ns:product:delete_product' tenant_name=tenant_name pk=product.pk %}">Delete Product</a>
-    {% else %}
-      <a href="{% url 'eshop_ns:cart:addtocart' tenant_name=tenant_name pk=product.pk %}" 
-        style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">
-        Add To Cart</a>
+    {% if request.user.is_authenticated %}
+      {% if request.user.username == tenant_name %}
+        <a href="{% url 'eshop_ns:product:update_product' tenant_name=tenant_name pk=product.pk %}">Update Product</a>
+        <a href="{% url 'eshop_ns:product:delete_product' tenant_name=tenant_name pk=product.pk %}">Delete Product</a>
+      {% else %}
+        <a href="{% url 'eshop_ns:cart:addtocart' tenant_name=tenant_name pk=product.pk %}" 
+          style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">
+          Add To Cart</a>
 
-      <a href="{% url 'eshop_ns:search:rating' tenant_name=tenant_name pk=product.pk %}" 
-        style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
-        Rate the Product</a>
+        <a href="{% url 'eshop_ns:search:rating' tenant_name=tenant_name pk=product.pk %}" 
+          style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
+          Rate the Product</a>
+      {% endif %}
     {% endif %}
-  {% endif %}
-
+  </div>
+  {% endfor %}
 
   <!-- Pagination -->
   {% if is_paginated %}
@@ -102,4 +103,4 @@
   </div>
   {% endif %}
 </div>
-{% endblock blog_content %}
+{% endblock %}
