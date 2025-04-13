@@ -111,7 +111,7 @@ class Log_Out_User(SuccessUrlRedirectMixin, View):
         logout(request)
         url = self.get_success_url()
         if url:
-            return redirect(f'https://{settings.BASE_DOMAIN}/{url}')
+            return redirect(f'https://{settings.BASE_DOMAIN}/{url}/')
         else:
             return redirect('/')
 
@@ -129,7 +129,7 @@ class NewProfile(LoginRequiredMixin, FormView):
             company.save()
             # Build tenant URL using the username (assumes each tenant's domain is formed with username)
             username = self.request.user.username.lower()
-            tenant_domain = f"https://{settings.BASE_DOMAIN}/{username}"
+            tenant_domain = f"https://{settings.BASE_DOMAIN}/{username}/"
             return redirect(tenant_domain)
         except:
             return redirect('/')
@@ -141,7 +141,7 @@ class HomeView(FormView):
         company=form.cleaned_data['name']
         vld_comp=Client.objects.filter(name=company).exists()
         if vld_comp:
-            return redirect("https://"+settings.BASE_DOMAIN+"/"+company)
+            return redirect("https://"+settings.BASE_DOMAIN+"/"+company+"/")
         else:
             # Add an error message to the form
             form.add_error('name', 'company not found. Please try again.')
