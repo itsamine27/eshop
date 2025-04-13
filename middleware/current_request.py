@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-EXCLUDED_PREFIXES = {'accounts', 'admin', 'static', 'media', 'favicon.ico', 'robots.txt'}
+EXCLUDED_PREFIXES = {'accounts', 'admin', 'static', 'media', 'favicon.ico', 'robots.txt', 'addproduct'}
 
 class PathBasedTenantMiddleware(MiddlewareMixin):
     def process_request(self, request):
