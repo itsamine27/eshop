@@ -6,6 +6,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+EXCLUDED_PREFIXES = {'accounts', 'admin', 'static', 'media', 'favicon.ico', 'robots.txt'}
+
 class PathBasedTenantMiddleware(MiddlewareMixin):
     def process_request(self, request):
         path_info = request.path_info.strip('/')
@@ -13,25 +15,31 @@ class PathBasedTenantMiddleware(MiddlewareMixin):
 
         TenantModel = get_tenant_model()
 
-        if path_parts and path_parts[0]:  # e.g., /samsung/
-            tenant_slug = path_parts[0].strip()
-            try:
-                tenant = TenantModel.objects.get(schema_name=tenant_slug)
+        if path_parts and path_parts[0]:
+            prefix = path_parts[0].strip()
+
+            # 🚫 Skip paths that should not be treated as tenants
+            if prefix in EXCLUDED_PREFIXES:
+                tenant = TenantModel.objects.get(schema_name=get_public_schema_name())
                 connection.set_tenant(tenant)
                 request.tenant = tenant
-                request.tenant_path_prefix = '/' + tenant_slug
-                logger.debug(f"[TenantMiddleware] Tenant found: {tenant_slug}")
+                request.tenant_path_prefix = ''
+                logger.debug(f"[TenantMiddleware] '{prefix}' excluded — using public tenant")
+                return
+
+            try:
+                tenant = TenantModel.objects.get(schema_name=prefix)
+                connection.set_tenant(tenant)
+                request.tenant = tenant
+                request.tenant_path_prefix = '/' + prefix
+                logger.debug(f"[TenantMiddleware] Tenant found: {prefix}")
             except TenantModel.DoesNotExist:
-                logger.warning(f"[TenantMiddleware] Tenant not found for slug: {tenant_slug}")
+                logger.warning(f"[TenantMiddleware] Tenant not found for slug: {prefix}")
                 return HttpResponseNotFound("Tenant not found.")
         else:
-            # Fallback to public schema
-            try:
-                public_tenant = TenantModel.objects.get(schema_name=get_public_schema_name())
-                connection.set_tenant(public_tenant)
-                request.tenant = public_tenant
-                request.tenant_path_prefix = ''
-                logger.debug("[TenantMiddleware] Public tenant set")
-            except TenantModel.DoesNotExist:
-                logger.critical("[TenantMiddleware] Public tenant not found!")
-                return HttpResponseNotFound("Public tenant not configured.")
+            # Public schema fallback
+            tenant = TenantModel.objects.get(schema_name=get_public_schema_name())
+            connection.set_tenant(tenant)
+            request.tenant = tenant
+            request.tenant_path_prefix = ''
+            logger.debug("[TenantMiddleware] Public tenant set")
