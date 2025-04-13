@@ -30,7 +30,7 @@ class PathBasedTenantMiddleware(MiddlewareMixin):
             try:
                 tenant = TenantModel.objects.get(schema_name=prefix)
                 connection.set_tenant(tenant)
-                request.tenant = tenant
+                request.tenant = tenant.lower()
                 request.tenant_path_prefix = '/' + prefix
                 logger.debug(f"[TenantMiddleware] Tenant found: {prefix}")
             except TenantModel.DoesNotExist:

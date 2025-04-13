@@ -50,31 +50,35 @@ class SuccessUrlRedirectMixin:
         return ""  # no safe next URL provided
 
 
-# ... (Mixin definitions remain the same)
 @method_decorator(ratelimit(key='ip', rate='7/m', block=True, method="POST"), name='dispatch')
 class Sign_Up_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
     template_name = "base/register.html"
     form_class = SignupUserForm
 
     def form_valid(self, form):
-        user = form.save()
+        # Make sure the username is lowercased before saving
+        user = form.save(commit=False)
+        user.username = user.username.lower()
+        user.save()
+
+        # Login setup
         backends = get_backends()
         if backends:
             user.backend = f"{backends[0].__module__}.{backends[0].__class__.__name__}"
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+
         messages.success(self.request, "You have successfully signed up!")
-        
-        
+
         central_host = f"{settings.BASE_DOMAIN}/"
-        
-        
+
         next_url = self.get_success_url()
         if next_url:
             if not (next_url.startswith("http://") or next_url.startswith("https://")):
                 return redirect(build_tenant_url(next_url))
-            return redirect(central_host+next_url)
+            return redirect(central_host + next_url)
         else:
             return redirect(reverse_lazy('create_company_profile'))
+
 @method_decorator(ratelimit(key='ip', rate='7/m', block=True, method="POST"), name='dispatch')
 class Log_In_User(AnonymousRequiredMixin, SuccessUrlRedirectMixin, FormView):
     template_name = 'base/login.html'
