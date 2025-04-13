@@ -10,5 +10,5 @@
     {% else %}
         <p>Your cart is empty.</p>
     {% endif %}
-    <a href="{% url 'cart:clearcart' %}">clear cart</a>
+    <a href="//{{ tenant_name }}{% url 'cart:clearcart' %}">clear cart</a>
 {% endblock blog_content %}
