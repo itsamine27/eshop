@@ -50,11 +50,11 @@ class AddProduct(LoginRequiredMixin, OnlyOwner, CreateView):
             self.object = form.save()
             formset.instance = self.object
             formset.save()
-            return redirect(reverse('product:allproducts', kwargs={'tenant_name': self.request.user.username}))
+            return redirect(reverse('eshop_ns:product:allproducts', kwargs={'tenant_name': self.request.user.username}))
         return self.form_invalid(form)
 
     def get_success_url(self):
-        return reverse('product:allproducts', kwargs={'tenant_name': self.request.user.username})
+        return reverse('eshop_ns:product:allproducts', kwargs={'tenant_name': self.request.user.username})
 
 
 class UpdateProduct(LoginRequiredMixin, OnlyOwner, UpdateView):
@@ -80,7 +80,7 @@ class UpdateProduct(LoginRequiredMixin, OnlyOwner, UpdateView):
         if image_formset.is_valid():
             form.save()
             image_formset.save()
-            return redirect(reverse('product:allproducts', kwargs={'tenant_name': self.request.user.username}))
+            return redirect(reverse('eshop_ns:product:allproducts', kwargs={'tenant_name': self.request.user.username}))
         return self.form_invalid(form)
 
 
@@ -89,7 +89,7 @@ class DeleteProduct(LoginRequiredMixin, OnlyOwner, DeleteView):
     template_name = "products/confirm_delete.html"
 
     def get_success_url(self):
-        return reverse_lazy('product:allproducts', kwargs={'tenant_name': self.request.user.username})
+        return reverse_lazy('eshop_ns:product:allproducts', kwargs={'tenant_name': self.request.user.username})
 
 
 class AllProducts(ListView):

@@ -32,9 +32,9 @@ class AddCart(LoginRequiredMixin, OnlyCustomer, View):
 
         # ✅ Safe reverse
         try:
-            redirect_url = reverse('product:allproducts', kwargs={'tenant_name': tenant_name})
+            redirect_url = reverse('eshop_ns:product:allproducts', kwargs={'tenant_name': tenant_name})
         except NoReverseMatch:
-            return HttpResponse("Redirect failed: 'product:allproducts' URL not found.", status=500)
+            return HttpResponse("Redirect failed: 'eshop_ns:product:allproducts' URL not found.", status=500)
 
         response = HttpResponseRedirect(redirect_url)
         response.set_cookie('cart', json.dumps(cart_items), max_age=3600)
@@ -61,9 +61,9 @@ class DeleteCart(LoginRequiredMixin, View):
 
         # ✅ Safe reverse
         try:
-            redirect_url = reverse_lazy('product:allproducts', kwargs={'tenant_name': tenant_name})
+            redirect_url = reverse_lazy('eshop_ns:product:allproducts', kwargs={'tenant_name': tenant_name})
         except NoReverseMatch:
-            return HttpResponse("Redirect failed: 'product:allproducts' URL not found.", status=500)
+            return HttpResponse("Redirect failed: 'eshop_ns:product:allproducts' URL not found.", status=500)
 
         response = HttpResponseRedirect(redirect_url)
         response.delete_cookie('cart')

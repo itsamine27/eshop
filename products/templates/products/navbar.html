@@ -23,9 +23,9 @@
             <h1 style="font-size: 1.2em; margin: 0; color: #333;">Hello {{request.user.username}}</h1>
             <a href="https://eshop-m942.onrender.com/accounts/logout/?next={{ tenant_name|urlencode }}" style="text-decoration: none; color: #007BFF;">Logout</a>
             {% if request.user.username == tenant_name %}
-                <a href="/{{ tenant_name }}{% url 'product:product_creation' %}" style="text-decoration: none; color: #28A745;">Add New Product</a>
+                <a href="{% url 'eshop_ns:product:allproducts' tenant_name=tenant_name %}" style="text-decoration: none; color: #28A745;">Add New Product</a>
             {% else %}
-                <a href="/{{ tenant_name }}{% url 'cart:allprocart' %}"  style="text-decoration: none; color: #17A2B8;">My cart</a>
+                <a href="{% url 'eshop_ns:cart:allprocart' tenant_name=tenant_name %}" style="text-decoration: none; color: #17A2B8;">My cart</a>
             {% endif %}
         {% else %}
             <a href="https://eshop-m942.onrender.com/accounts/login/?next={{ tenant_name|urlencode }}" style="text-decoration: none; color: #007BFF;">Login</a>
