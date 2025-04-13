@@ -69,7 +69,7 @@ class RatingView(LoginRequiredMixin,OnlyCustomer,View):
             messages.success(request, 'Rating successfully submitted!')
             tenant_name =kwargs.get('tenant_name')
             redirect_url = reverse('eshop_ns:product:allproducts', kwargs={'tenant_name': tenant_name})
-            return redirect_url
+            return redirect(redirect_url)
         else:
             messages.error(request, 'Invalid input. Please provide a valid rating.')
             return render(request, 'searchprod/rating.html', {'form': form, 'product': product})
