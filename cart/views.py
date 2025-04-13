@@ -11,7 +11,7 @@ from django.urls.exceptions import NoReverseMatch  # <-- For safety
 class OnlyCustomer(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         tenant_name = kwargs.get('tenant_name') or request.path.strip('/').split('/')[0]
-        if not request.user.is_authenticated or request.user.username.lower() != tenant_name.lower():
+        if not request.user.is_authenticated or request.user.username.lower() == tenant_name.lower():
             return HttpResponse("Forbidden", status=403)
         return super().dispatch(request, *args, **kwargs)
 
