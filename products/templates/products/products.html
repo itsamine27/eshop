@@ -5,7 +5,7 @@
   <h1 style="text-align: center; color: #333;">All Products</h1>
 
   <!-- Search Form -->
-  <form method="GET" action="{% url 'search:search' %}" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+  <form method="GET" action="{% url 'eshop_ns:search:search' %}" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
     <input 
       type="text" 
       name="q" 
@@ -73,19 +73,21 @@
     {% endif %}
 
     <!-- Authenticated User Actions -->
-    {% if request.user.is_authenticated %}
-      {% if request.user.username == tenant_name %}
-      <a href="{%url 'product:update_product' product.pk %}">update Product</a>
-      <a href="{% url 'product:delete_product' product.pk %}">delete Product</a>
-      {%else%}
-        <a href="{% url 'cart:addtocart' product.pk %}" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">Add To Cart</a>
-        <a href="{% url 'search:rating' product.pk %}" style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">Rate the Product</a>
-      {% endif %}
+  {% if request.user.is_authenticated %}
+    {% if request.user.username == tenant_name %}
+      <a href="{% url 'eshop_ns:product:update_product' tenant_name=tenant_name pk=product.pk %}">Update Product</a>
+      <a href="{% url 'eshop_ns:product:delete_product' tenant_name=tenant_name pk=product.pk %}">Delete Product</a>
+    {% else %}
+      <a href="{% url 'eshop_ns:cart:addtocart' tenant_name=tenant_name pk=product.pk %}" 
+        style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">
+        Add To Cart</a>
+
+      <a href="{% url 'eshop_ns:search:rating' tenant_name=tenant_name pk=product.pk %}" 
+        style="padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
+        Rate the Product</a>
     {% endif %}
-  </div>
-  {% empty %}
-  <p>No products found.</p>
-  {% endfor %}
+  {% endif %}
+
 
   <!-- Pagination -->
   {% if is_paginated %}
