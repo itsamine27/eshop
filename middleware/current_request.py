@@ -16,7 +16,7 @@ class PathBasedTenantMiddleware(MiddlewareMixin):
         TenantModel = get_tenant_model()
 
         if path_parts and path_parts[0]:
-            prefix = path_parts[0].strip()
+            prefix = path_parts[0].strip().lower()  # ⬅️ Always lowercased
 
             # 🚫 Skip paths that should not be treated as tenants
             if prefix in EXCLUDED_PREFIXES:
@@ -30,7 +30,7 @@ class PathBasedTenantMiddleware(MiddlewareMixin):
             try:
                 tenant = TenantModel.objects.get(schema_name=prefix)
                 connection.set_tenant(tenant)
-                request.tenant = tenant.lower()
+                request.tenant = tenant
                 request.tenant_path_prefix = '/' + prefix
                 logger.debug(f"[TenantMiddleware] Tenant found: {prefix}")
             except TenantModel.DoesNotExist:
