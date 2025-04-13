@@ -14,15 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
 from django.urls import path, include
 
 app_name = 'eshop_ns'
 urlpatterns = [
-    
     path('', include(('products.urls', 'product'), namespace="product")),
     path('cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('search/', include(('searchprod.urls', 'search'), namespace="search")),
-
-    
-] 
+]
