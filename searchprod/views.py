@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.http import HttpResponse
 # Create your views here.
 from django.contrib import messages
@@ -11,6 +11,7 @@ from django.views import View
 from cart.views import OnlyCustomer
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import RatingForm
+from django.conf import settings
 class SearchListView(ListView):
     model = CompanyProducts  # Your model
     template_name = 'products/products.html'  # Template to render
@@ -66,7 +67,9 @@ class RatingView(LoginRequiredMixin,OnlyCustomer,View):
             rating = form.cleaned_data['rating']
             ProductRating.objects.create(product_rating=rating, product=product)
             messages.success(request, 'Rating successfully submitted!')
-            return redirect('/')
+            tenant_name =kwargs.get('tenant_name')
+            redirect_url = reverse('eshop_ns:product:allproducts', kwargs={'tenant_name': tenant_name})
+            return redirect_url
         else:
             messages.error(request, 'Invalid input. Please provide a valid rating.')
             return render(request, 'searchprod/rating.html', {'form': form, 'product': product})
