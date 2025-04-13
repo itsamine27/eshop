@@ -6,5 +6,5 @@
 <form method="post">
     {% csrf_token %}
     <button type="submit">Yes, delete</button>
-    <a href="{% url 'eshop_ns:product:allproducts' %}">Cancel</a>
+    <a href="{% url 'eshop_ns:product:allproducts' tenant_name=tenant_name %}">Cancel</a>
 </form>
