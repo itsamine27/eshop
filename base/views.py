@@ -128,7 +128,7 @@ class NewProfile(LoginRequiredMixin, FormView):
             company.company = self.request.user
             company.save()
             # Build tenant URL using the username (assumes each tenant's domain is formed with username)
-            username = self.request.user.username
+            username = self.request.user.username.lower()
             tenant_domain = f"https://{settings.BASE_DOMAIN}/{username}/"
             return redirect(tenant_domain)
         except:
