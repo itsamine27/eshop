@@ -14,6 +14,7 @@ from base.utils import build_tenant_url
 from django.utils.decorators import method_decorator
 from django_ratelimit.decorators import ratelimit
 import bleach
+from .models import Client
 # ------------------------------------------------------------------------------
 # Mixin to prevent authenticated users from accessing login/register pages.
 # ------------------------------------------------------------------------------
@@ -138,6 +139,12 @@ class HomeView(FormView):
     template_name="base/home.html"
     def form_valid(self, form):
         company=form.cleaned_data['name']
-        return redirect("https://"+settings.BASE_DOMAIN+"/"+company)
+        vld_comp=Client.objects.filter(name=company).exists()
+        if vld_comp:
+            return redirect("https://"+settings.BASE_DOMAIN+"/"+company)
+        else:
+            # Add an error message to the form
+            form.add_error('name', 'company not found. Please try again.')
+            return self.form_invalid(form)  # Re-render the form with the error
 
 

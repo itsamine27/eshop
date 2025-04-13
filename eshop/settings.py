@@ -64,6 +64,7 @@ CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Middleware - Note the change below for path-based tenancy:
 MIDDLEWARE = [
@@ -165,3 +166,4 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
+APPEND_SLASH = True
