@@ -5,7 +5,7 @@
   <h1 style="text-align: center; color: #333;">All Products</h1>
 
   <!-- Search Form -->
-  <form method="GET" action="{% url 'eshop_ns:search:search' %}" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+  <form method="GET" action="{% url 'eshop_ns:search:search' tenant_name=tenant_name %}" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
     <input 
       type="text" 
       name="q" 
